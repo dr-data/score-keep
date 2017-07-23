@@ -10,7 +10,7 @@ const renderPlayers = (playersList) => {
 		<p key={player._id}>
 		{player.name} has {player.score} point(s).
 		<button onClick={()=>{
-			Players.remove(player._id)
+			Players.remove({_id: player._id})
 		}}>x</button>
 		</p>
 	));
