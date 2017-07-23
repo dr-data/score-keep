@@ -1,20 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Meteor} from 'meteor/meteor';
+import {Tracker} from 'meteor/tracker';
 
-const players = [{
-	_id: '1',
-	name: 'Lauren',
-	score: 99
-},{
-	_id: '2',
-	name: 'Cory',
-	score: -1
-},{
-	_id: '3',
-	name: 'data',
-	score: 112
-}];
+import {Players} from './../imports/api/players';
 
 const renderPlayers = function (playersList) {
 	return playersList.map(function (player) {
@@ -22,18 +11,43 @@ const renderPlayers = function (playersList) {
 	});
 };
 
+const handleSumbit = function (event) {
+	let playerName = event.target.playerName.value;
+	let score = event.target.score.value;
+	event.preventDefault();
+
+	if (playerName) {
+		event.target.playerName.value = ''
+		event.target.score.value = ''
+		Players.insert ({
+			name: playerName,
+			score: score
+		});
+	}
+};
+
 Meteor.startup(function() {
-	let title = 'Account Settings';
-	let name = 'data';
-	let jsx =(
-	<div>
-		<h1> {title}! </h1>
-		<p> Hello {name}! </p>
-		<p>This is my second p.</p>
-		{renderPlayers(players)}
-	</div>
-	);
+	//Call tracker.autorun
+	//	create variable called players --> set equal to fetch query
+	// Render players to the screen
 
-	ReactDOM.render(jsx, document.getElementById('app'));
-
+	Tracker.autorun(function(){
+		let players = Players.find().fetch();
+		let title = 'Score Settings';
+		let name = 'data -';
+		let jsx =(
+		<div>
+			<h1> {title}! </h1>
+			<p> Hello {name}! </p>
+			<p>This is my second p.</p>
+			{renderPlayers(players)}
+			<form onSubmit={handleSumbit}>
+				<input type="text" name="playerName" placeholder="Player name"/>
+				<input type="number" name="score" placeholder="score"/>
+				<button>Add Player</button>
+			</form>
+		</div>
+		);
+		ReactDOM.render(jsx, document.getElementById('app'));
+	});
 });
