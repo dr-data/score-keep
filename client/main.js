@@ -5,13 +5,18 @@ import {Tracker} from 'meteor/tracker';
 
 import {Players} from './../imports/api/players';
 
-const renderPlayers = function (playersList) {
-	return playersList.map(function (player) {
-		return <p key={player._id}> {player.name} has {player.score} point(s).</p> ;
-	});
+const renderPlayers = (playersList) => {
+	return playersList.map((player) => (
+		<p key={player._id}>
+		{player.name} has {player.score} point(s).
+		<button onClick={()=>{
+			Players.remove(player._id)
+		}}>x</button>
+		</p>
+	));
 };
 
-const handleSumbit = function (event) {
+const handleSumbit = (event) => {
 	let playerName = event.target.playerName.value;
 	let score = event.target.score.value;
 	event.preventDefault();
@@ -26,12 +31,12 @@ const handleSumbit = function (event) {
 	}
 };
 
-Meteor.startup(function() {
+Meteor.startup(()=> {
 	//Call tracker.autorun
 	//	create variable called players --> set equal to fetch query
 	// Render players to the screen
 
-	Tracker.autorun(function(){
+	Tracker.autorun(()=>{
 		let players = Players.find().fetch();
 		let title = 'Score Settings';
 		let name = 'data -';
