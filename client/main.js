@@ -6,17 +6,30 @@ import {Tracker} from 'meteor/tracker';
 import {Players} from './../imports/api/players';
 
 const renderPlayers = (playersList) => {
-	return playersList.map((player) => (
-		<p key={player._id}>
-		{player.name} has {player.score} point(s).
-		<button onClick={()=>{
-			Players.remove({_id: player._id})
-		}}>x</button>
-		</p>
-	));
+  return playersList.map((player) => {
+    return (
+      <p key={player._id}>
+        {player.name} has {player.score} point(s).
+        <button onClick={() => {
+        	Players.update({_id: player._id}, {
+        		$inc: {score: 1}
+        	});
+        }}>+1</button>
+
+         <button onClick={() => {
+        	Players.update({_id: player._id}, {
+        		$inc: {score: -1}
+        	});
+        }}>-1</button>
+
+
+        <button onClick={() => Players.remove({_id: player._id})}>X</button>
+      </p>
+    );
+  });
 };
 
-const handleSumbit = (event) => {
+const handleSumbit = (event) => { 
 	let playerName = event.target.playerName.value;
 	let score = event.target.score.value;
 	event.preventDefault();
@@ -48,7 +61,7 @@ Meteor.startup(()=> {
 			{renderPlayers(players)}
 			<form onSubmit={handleSumbit}>
 				<input type="text" name="playerName" placeholder="Player name"/>
-				<input type="number" name="score" placeholder="score"/>
+				<input type="number" name="score" />
 				<button>Add Player</button>
 			</form>
 		</div>
