@@ -16,9 +16,14 @@ Meteor.startup (() => {
       return `Hi! I am ${this.name} is ${this.age} year (s) old.`
     }
   }
+
+  class Employee extends Person {
+
+  }
+
   // let me = new Person('mike');
   // console.log(me.getAge());
 
-  let me = new Person('Andrew', 25);
+  let me = new Employee('Andrew', 25);
   console.log(me.getAge());
 });
