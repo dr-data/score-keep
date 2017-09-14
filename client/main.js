@@ -44,7 +44,7 @@ Meteor.startup(() => {
     let title = 'Score Keep';
     let jsx = (
       <div>
-        <TitleBar title={title} subtitle="Created by Andrew Mead"/>
+        <TitleBar/>
         {renderPlayers(players)}
         <AddPlayer/>
         <form onSubmit={handleSubmit}>
